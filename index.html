@@ -2,73 +2,108 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Esewa Records</title>
+
   <style>
+    :root {
+      --primary-color: #4f46e5;
+      --bg-light: rgba(255, 255, 255, 0.25);
+      --bg-dark: rgba(30, 30, 30, 0.6);
+      --backdrop-blur: blur(15px);
+      --text-color-light: #111;
+      --text-color-dark: #eee;
+      --accent-color: #10b981;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
     }
 
     body {
-      background: linear-gradient(135deg, #74ebd5, #acb6e5);
       min-height: 100vh;
+      background: linear-gradient(135deg, #74ebd5, #acb6e5);
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 20px;
     }
 
+    body.dark {
+      background: linear-gradient(135deg, #1c1c1c, #2c3e50);
+    }
+
     .container {
-      background: white;
+      background: var(--bg-light);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
       padding: 30px;
-      border-radius: 10px;
+      border-radius: 20px;
       max-width: 500px;
       width: 100%;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      color: var(--text-color-light);
+      position: relative;
+    }
+
+    body.dark .container {
+      background: var(--bg-dark);
+      color: var(--text-color-dark);
     }
 
     .form-box h1 {
       text-align: center;
       margin-bottom: 20px;
-      font-size: 28px;
-      color: #333;
+      font-size: 30px;
+      color: var(--primary-color);
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
 
     label {
       display: block;
-      margin-bottom: 6px;
       margin-top: 15px;
+      margin-bottom: 6px;
       font-weight: 600;
-      color: #555;
+      font-size: 14px;
+      color: inherit;
     }
 
-    input[type="text"],
-    input[type="number"],
-    input[type="date"],
-    input[type="time"],
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      background-color: #f9f9f9;
-      font-size: 15px;
-      transition: border-color 0.3s ease;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s ease;
     }
 
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    input[type="date"]:focus,
-    input[type="time"]:focus,
-    select:focus,
-    textarea:focus {
-      border-color: #74ebd5;
-      outline: none;
+    body.dark input, 
+    body.dark select,
+    body.dark textarea {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--text-color-dark);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary-color);
+      transform: scale(1.02);
+      background-color: rgba(255,255,255,0.8);
+    }
+
+    body.dark input:focus, 
+    body.dark select:focus, 
+    body.dark textarea:focus {
+      background-color: rgba(255,255,255,0.2);
     }
 
     textarea {
@@ -78,71 +113,154 @@
 
     button {
       width: 100%;
-      background-color: #4CAF50;
+      background: var(--accent-color);
       color: white;
-      padding: 12px;
+      padding: 14px;
       margin-top: 20px;
       font-size: 16px;
+      font-weight: 600;
       border: none;
-      border-radius: 6px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s ease;
     }
 
     button:hover {
-      background-color: #45a049;
+      background: #059669;
     }
+
+    /* Toggle Switch */
+    .toggle-theme {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--primary-color);
+    }
+
+    /* Toast Message */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      animation: slideIn 0.5s forwards;
+      z-index: 999;
+    }
+
+    @keyframes slideIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      .form-box h1 {
+        font-size: 24px;
+      }
+    }
+
   </style>
 </head>
 <body>
-  <div class="container" >
-  <form action="https://script.google.com/macros/s/AKfycbwszV8y2JdeI2vQE6AHlSzEohDmsRqMqaCcC-T7SVCynpSfksyeu01S6YWKchFDmNuQ/exec" method="POST" class="form-box" id="gameForm">
-    <h1>Esewa Record</h1>
 
-      <label>Name:</label>
-      <input type="text" name="playerName" placeholder="Enter name">
+  <div class="container">
+    <button class="toggle-theme" onclick="toggleTheme()">🌙</button>
 
-      <label>Esewa:</label>
-      <input type="text" name="cashtag" placeholder="Enter Esewa ID">
+    <div class="form-box" id="gameForm">
+      <form action="https://script.google.com/macros/s/AKfycbwszV8y2JdeI2vQE6AHlSzEohDmsRqMqaCcC-T7SVCynpSfksyeu01S6YWKchFDmNuQ/exec" method="POST" onsubmit="showToast(event)">
+        <h1>Esewa Record</h1>
 
-      <label>PL:</label>
-      <select name="game">
-        <option>ab</option>
-        <option>cd</option>
-        <option>ef</option>
-      </select>
+        <label>Name:</label>
+        <input type="text" name="playerName" placeholder="Enter name" required>
 
-      <label>Aako:</label>
-      <input type="number" name="cashin" placeholder="Enter Cash In">
+        <label>Esewa:</label>
+        <input type="text" name="cashtag" placeholder="Enter Esewa ID" required>
 
-      <label>Gako:</label>
-      <input type="number" name="cashout" placeholder="Enter Cash Out">
+        <label>PL:</label>
+        <select name="game" required>
+          <option value="">Select Game</option>
+          <option>ab</option>
+          <option>cd</option>
+          <option>ef</option>
+        </select>
 
-      <label>Employee:</label>
-      <select name="employee">
-        <option>AWs</option>
-        <option>John</option>
-        <option>Lisa</option>
-      </select>
+        <label>Aako:</label>
+        <input type="number" name="cashin" placeholder="Enter Cash In" required>
 
-      <label>Date:</label>
-      <input type="date" name="date" id="date">
+        <label>Gako:</label>
+        <input type="number" name="cashout" placeholder="Enter Cash Out" required>
 
-      <label>Time:</label>
-      <input type="time" name="time" id="time">
+        <label>Employee:</label>
+        <select name="employee" required>
+          <option value="">Select Employee</option>
+          <option>AWs</option>
+          <option>John</option>
+          <option>Lisa</option>
+        </select>
 
-      <label>Remarks:</label>
-      <textarea name="remarks" placeholder="Enter remarks..."></textarea>
+        <label>Date:</label>
+        <input type="date" name="date" id="date" required>
 
-      <label>Record From:</label>
-      <select name="recordFrom">
-        <option>1231</option>
-        <option>M</option>
-        <option>J</option>
-      </select>
+        <label>Time:</label>
+        <input type="time" name="time" id="time" required>
 
-      <button type="submit">Submit</button>
-    </form>
+        <label>Remarks:</label>
+        <textarea name="remarks" placeholder="Enter remarks..." required></textarea>
+
+        <label>Record From:</label>
+        <select name="recordFrom" required>
+          <option value="">Select Source</option>
+          <option>1231</option>
+          <option>M</option>
+          <option>J</option>
+        </select>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   </div>
+
+  <script>
+    // Auto set date and time
+    window.onload = () => {
+      const now = new Date();
+      document.getElementById('date').value = now.toISOString().split('T')[0];
+      document.getElementById('time').value = now.toTimeString().split(' ')[0].slice(0,5);
+    };
+
+    // Toast function
+    function showToast(event) {
+      event.preventDefault();
+      const form = event.target;
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = '✅ Record Submitted!';
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+        form.submit();
+      }, 2000);
+    }
+
+    // Theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const themeButton = document.querySelector('.toggle-theme');
+      themeButton.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    }
+  </script>
+
 </body>
 </html>
