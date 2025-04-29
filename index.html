@@ -3,32 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>esewa Records</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Esewa Records</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #74ebd5, #acb6e5);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .form-box h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+      font-size: 15px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    input[type="time"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #74ebd5;
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      margin-top: 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <form action="https://script.google.com/macros/s/AKfycbzkhp5I8cgmvva1nLjRWU8fOYIf2HCZx1OAV3TFtZ7o_YJWBDurPJhlpSWrlCglk5c/exec" method="POST" class="form-box" id="gameForm">
-      <h1>esewa record</h1>
+      <h1>Esewa Record</h1>
 
-      <label> Name:</label>
-      <input type="text" name="playerName" placeholder="Enter  name">
+      <label>Name:</label>
+      <input type="text" name="playerName" placeholder="Enter name">
 
-      <label>esewa:</label>
-      <input type="text" name="cashtag">
+      <label>Esewa:</label>
+      <input type="text" name="cashtag" placeholder="Enter Esewa ID">
 
-      <label>pl:</label>
+      <label>PL:</label>
       <select name="game">
         <option>ab</option>
         <option>cd</option>
         <option>ef</option>
       </select>
 
-      <label>aako:</label>
-      <input type="number" name="cashin">
+      <label>Aako:</label>
+      <input type="number" name="cashin" placeholder="Enter Cash In">
 
-      <label>gako:</label>
-      <input type="number" name="cashout">
+      <label>Gako:</label>
+      <input type="number" name="cashout" placeholder="Enter Cash Out">
 
       <label>Employee:</label>
       <select name="employee">
@@ -46,7 +134,7 @@
       <label>Remarks:</label>
       <textarea name="remarks" placeholder="Enter remarks..."></textarea>
 
-      <label>Record from:</label>
+      <label>Record From:</label>
       <select name="recordFrom">
         <option>1231</option>
         <option>M</option>
@@ -56,66 +144,5 @@
       <button type="submit">Submit</button>
     </form>
   </div>
-
- <script>
-  // Prefill date and time
-  window.onload = () => {
-    const now = new Date();
-    document.getElementById("date").value = now.toISOString().split("T")[0];
-    document.getElementById("time").value = now.toTimeString().slice(0, 5);
-  };
-
-  document.getElementById("gameForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const form = this;
-    const formData = new FormData(form);
-    const json = {};
-
-    // Validate required fields
-    const requiredFields = ["playerName", "cashtag", "cashin", "cashout", "employee", "date", "time", "recordFrom"];
-
-    let valid = true;
-    requiredFields.forEach(field => {
-      const value = formData.get(field);
-      if (!value || value.trim() === "") {
-        valid = false;
-        alert(`Please fill out the field: ${field}`);
-      }
-    });
-
-    if (!valid) {
-      return; // Stop submitting if validation fails
-    }
-
-    formData.forEach((value, key) => {
-      json[key] = value;
-    });
-
-    fetch('https://script.google.com/macros/s/AKfycbzkhp5I8cgmvva1nLjRWU8fOYIf2HCZx1OAV3TFtZ7o_YJWBDurPJhlpSWrlCglk5c/exec', {
-      method: 'POST',
-      body: JSON.stringify(json),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => response.text())
-    .then(text => {
-      console.log("Response:", text);
-      if (text.includes("Success")) {
-        alert("Submitted successfully!");
-        form.reset();
-      } else {
-        alert("Error submitting form: " + text);
-      }
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      alert("Network error submitting form.");
-    });
-  });
-</script>
-
-  
 </body>
 </html>
